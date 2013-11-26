@@ -39,6 +39,7 @@
 			/*#applet { position: absolute; top: 4px; left: 4px; z-index: 2; }*/
 			#link { position: absolute; top: 4px; right: 4px; z-index: 3; }
 		</style>
+		<script language="JavaScript" type="text/javascript" src="lib/underscore.js"></script>
 		<script language="JavaScript" type="text/javascript" src="lib/termlib/termlib.js"></script>
 		<script language="JavaScript" type="text/javascript" src="lib/shell-files.js"></script>
 		<script language="JavaScript" type="text/javascript" src="lib/stem-shell.js"></script>
@@ -47,6 +48,7 @@
 		<div id="termTarget" class="term"></div>
 	</body>
 	<script type="text/javascript">
-		termOpen();
+		var termb = new SystemBase();
+		termb.termOpen();
 	</script>
 </html>

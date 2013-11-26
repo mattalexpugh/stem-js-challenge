@@ -1,200 +1,238 @@
-/* Util funcs */
+var BASE_HOME_DIR = {
+	'documents': {},
+	'downloads': {},
+	'.bash_profile': ''
+};
 
-function hasKey(k, dict) {
-	for (var x in dict) {
-		if (x == k) {
-			return true;
+var BASE_FS = {
+	'/': {
+		'home': {
+			'root': BASE_HOME_DIR
 		}
 	}
+};
 
-	return false;
-}
+var DNS = {
+	'192.168.1.1': SystemBase
+};
 
+function SystemBase() {
 
-/* Session vars */
-var term;
-var fs;
-var cwd ='/';
-var args = [];
+	this.args = [];
+	this.cwd = ['/'],
+	this.fs = BASE_FS;
+	this.term = null;
+	this.greeting = "%+r Base System Greeting %-r";
+	this.ps = "$ >";
+	this.username = 'root';
+	this.password = 'toor';
+	this.authenticated = false;
 
-/* Args handling */
-function resetArgs() {
-	args = [];
-}
+	var self = this;
 
-function setArgs(argv) {
-	for (var i = 1; i < argv.length; i++) {
-		args.push(argv[i]);
-	}
-}
+	this.resetArgs = function() {
+		self.args = [];
+	};
 
-function _checkArgs(error) {
-	var hasArgs = (args.length > 0);
+	this.setArgs = function(argv) {
+		for (var i = 1; i < argv.length; i++) {
+			self.args.push(argv[i]);
+		}
+	};
 
-	if (! hasArgs) {
-		term.write(error);
-		return false;
-	}
+	this._checkArgs = function(error) {
+		var hasArgs = (self.args.length > 0);
 
-	return true;
-}
+		if (! hasArgs) {
+			self.term.write(error);
+		}
 
-/* Term Bootstrapping */
+		return hasArgs;
+	};
 
-function termOpen() {
-	if ((!term) || (term.closed)) {
-		term = new Terminal(
-			{
-		        cols: 100,
-		        rows: 35,
-		        x: 100,
-		        y: 100,
-		        termDiv: 'termTarget',
-		        bgColor: '#181818',
-		        frameColor: '#555555',
-		        frameWidth: 1,
-		        rowHeight: 15,
-		        blinkDelay: 500,
-		        fontClass: 'term',
-		        crsrBlinkMode: false,
-		        crsrBlockMode: true,
-		        DELisBS: false,
-		        printTab: true,
-		        printEuro: true,
-		        catchCtrlH: true,
-		        closeOnESC: true,
-		        historyUnique: false,
-		        id: 0,
-		        ps: '>',
-		        ctrlHandler: null,
-		        initHandler: null,
-		        wrap: false,
-				greeting: help.join('%n'),
-				handler: termHandler,
-				exitHandler: termExitHandler,
-			}
-		);
-		term.open();
+	this.termOpen = function() {
+		if ((!self.term) || (self.term.closed)) {
+			self.term = new Terminal({
+				cols: 100,
+				rows: 35,
+				x: 100,
+				y: 100,
+				termDiv: 'termTarget',
+				bgColor: '#181818',
+				frameColor: '#555555',
+				frameWidth: 1,
+				rowHeight: 15,
+				blinkDelay: 500,
+				fontClass: 'term',
+				crsrBlinkMode: false,
+				crsrBlockMode: true,
+				DELisBS: false,
+				printTab: true,
+				printEuro: true,
+				catchCtrlH: true,
+				closeOnESC: true,
+				historyUnique: false,
+				id: 0,
+				ps: self.ps,
+				ctrlHandler: null,
+				initHandler: null,
+				wrap: false,
+				greeting: self.greeting,
+				handler: this.termHandler,
+				exitHandler: this.termExitHandler,
+				}
+			);
 
-		// dimm UI text
+			self.term.open();
+
+			var mainPane = (document.getElementById)?
+				document.getElementById('mainPane') : document.all.mainPane;
+			if (mainPane) mainPane.className = 'lh15 dimmed';
+		}
+	};
+
+	this.termExitHandler = function() {
 		var mainPane = (document.getElementById)?
 			document.getElementById('mainPane') : document.all.mainPane;
-		if (mainPane) mainPane.className = 'lh15 dimmed';
-	}
-}
+		if (mainPane) mainPane.className = 'lh15';
+	};
 
-function termExitHandler() {
-	// reset the UI
-	var mainPane = (document.getElementById)?
-		document.getElementById('mainPane') : document.all.mainPane;
-	if (mainPane) mainPane.className = 'lh15';
-}
+	this.getCurrentDirList = function() {
+		var dir = self.fs[self.cwd];
+		var items = _.keys(dir);
 
+		return items;
+	};
 
-/* Commands */
-function cmdMan() {
-	return false;
-}
+	this.cmdMan = function() {
+		return false;
+	};
 
-function cmdLs() {
-	return false;
-}
+	this.cmdLs = function() {
+		self.term.write(self.getCurrentDirList());
+	};
 
-function cmdCat() {
-	if (_checkArgs("Error: Usage - cat <filename>")) {
+	this.cmdCat = function() {
+		if (self._checkArgs("Error: Usage - cat <filename>")) {
 
-		var fileFound = hasKey(args[0], filesContainer);
+			var fileFound = _.has(self.fs, self.args[0]);
 
-		if (! fileFound) {
-			term.write("Error: Unknown file: " + args[0]);
+			if (! fileFound) {
+				self.term.write("Error: Unknown file: " + self.args[0]);
+				return false;
+			}
+
+			self.term.write(self.fs[self.args[0]], true);
+		}
+	};
+
+	this.cmdLogin = function() {
+		return false;
+	};
+
+	this.cmdChown = function() {
+		return false;
+	};
+
+	this.cmdDecryp = function() {
+		return "decrypt";
+	};
+
+	this.cmdPwd = function() {
+		self.term.write(self.cwd);
+	};
+
+	this.cmdCd = function() {
+		if (! self._checkArgs("Error: Usage - cd <dirname>")) {
 			return false;
 		}
 
-		term.write(filesContainer[args[0]], true);
-	}
-}
+		var items = self.fs[self.cwd];
+		var dirs = _.filter(items, function(x) { return (typeof x == "object");});
 
-function cmdLogin() {
-	return false;
-}
+		debugger;
+		var dirname = self.args[0];
+		var valid = _.has(dirs, dirname);
 
-function cmdChown() {
-	return false;
-}
-
-function cmdDecrypt() {
-	return "decrypt";
-}
-
-function cmdPwd() {
-	term.write(cwd, true);
-}
-
-function cmdCd() {
-
-}
-
-/* Function Pointers */
-var CMD_PTRS = {
-	'man': cmdMan,
-	'ls': cmdLs,
-	'cd': cmdCd,
-	'cat': cmdCat,
-	'login': cmdLogin,
-	'chown': cmdChown,
-	'decrypt': cmdDecrypt,
-	'pwd': cmdPwd
-}
-
-
-function termHandler() {
-	this.newLine();
-
-	if (this.lineBuffer.match(/^\s*exit\s*$/i)) {
-		this.close();
-		return;
-	}
-	else if (this.lineBuffer.match(/^\s*tests\s+-w\s*$/i)) {
-		this.write('starting tests with wrap %+ion%-i:');
-		this.newLine();
-		this.newLine();
-		this.write(texts);
-	}
-	else if (this.lineBuffer.match(/^\s*tests\s*$/i)) {
-		this.wrapOff();
-		this.write('starting tests with wrap %+ioff%-i:');
-		this.newLine();
-		this.newLine();
-		this.write(texts);
-		this.wrapOn();
-	}
-	else if (this.lineBuffer.match(/^\s*kant\s*$/i)) {
-		this.write(kant, true);
-		return;
-	}
-	else if (this.lineBuffer.match(/^\s*help\s*$/i)) {
-		this.clear();
-		this.write(help);
-	}
-	else if (this.lineBuffer != '') {
-		var funcLine = this.lineBuffer.replace(/%/g, '%%');
-		var argv = funcLine.split(" ")
-		var command = argv[0];
-		var commandFound = hasKey(command, CMD_PTRS);
-
-		if ((argv.length > 1) && (argv[1].length > 0)) {
-			setArgs(argv);
+		if (! valid) {
+			self.term.write("Error: Unknown directory '" + dirname + "'");
+			return false;
 		}
 
-		if (commandFound) {
-			CMD_PTRS[command]();
-		} else {
-			this.write("Command not recognised. Try again.");
+		self.cwd.push(dirname);
+	};
+
+	this.cmdExit = function() {
+		self.term.close();
+	};
+
+	this.cmdWhoAmI = function() {
+		self.term.write(self.username);
+	};
+
+	this.cmdSsh = function() {
+		if (! self._checkArgs("Error: Usage - ssh <computer_address>")) {
+			return false;
 		}
 
-		this.newLine();
-		resetArgs();
-	}
+		var ip = self.args[0];
+		var valid = _.has(DNS, ip);
 
-	this.prompt();
+		if (! valid) {
+			self.term.write("Error: Unable to connect to " + ip);
+			return false;
+		}
+
+		var newSession = new DNS[ip]();
+		newSession.termOpen();
+	};
+
+	this.doLogin = function(username, password) {
+		self.authenticated = ((username == self.username) &&
+								(password == self.password));
+	};
+
+	this.isAuthenticated = function() {
+		return self.authenticated;
+	};
+
+	this.CMD_PTRS = { /* Function Pointers */
+		'man': self.cmdMan,
+		'ls': self.cmdLs,
+		'cd': self.cmdCd,
+		'cat': self.cmdCat,
+		'login': self.cmdLogin,
+		'chown': self.cmdChown,
+		'decrypt': self.cmdDecrypt,
+		'pwd': self.cmdPwd,
+		'exit': self.cmdExit,
+		'whoami': self.cmdWhoAmI,
+		'ssh': self.cmdSsh
+	};
+
+	this.termHandler = function() {
+		self.term.newLine();
+
+		if (self.term.lineBuffer != '') {
+			var funcLine = self.term.lineBuffer.replace(/%/g, '%%');
+			var argv = funcLine.split(" ")
+			var command = argv[0];
+			var commandFound = _.has(self.CMD_PTRS, command);
+
+			if ((argv.length > 1) && (argv[1].length > 0)) {
+				self.setArgs(argv);
+			}
+
+			if (commandFound) {
+				self.CMD_PTRS[command]();
+			} else {
+				self.term.write("Command not recognised. Try again.");
+			}
+
+			self.term.newLine();
+			self.resetArgs();
+		}
+
+		self.term.prompt();
+	};
 }
