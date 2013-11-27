@@ -1,31 +1,21 @@
-var BASE_HOME_DIR = {
-	'documents': {},
-	'downloads': {},
-	'.bash_profile': ''
-};
-
-var BASE_FS = {
-	'/': {
-		'home': {
-			'root': BASE_HOME_DIR
-		}
-	}
-};
-
 var DNS = {
-	'192.168.1.1': SystemBase
+	'192.168.1.1': 'base',
+	'192.168.2.200': 'michael'
 };
 
-function SystemBase() {
+var termCount = 0;
 
+function SystemBase(profile) {
+
+	this.activeprofile = profile;
 	this.args = [];
 	this.cwd = ['/'],
-	this.fs = BASE_FS;
+	this.fs = PROFILES[profile].fs;
 	this.term = null;
-	this.greeting = "%+r Base System Greeting %-r";
-	this.ps = "$ >";
-	this.username = 'root';
-	this.password = 'toor';
+	this.greeting = PROFILES[profile].greeting;
+	this.ps = PROFILES[profile].ps;
+	this.username = PROFILES[profile].username;
+	this.password = PROFILES[profile].password;
 	this.authenticated = false;
 
 	var self = this;
@@ -51,13 +41,16 @@ function SystemBase() {
 	};
 
 	this.termOpen = function() {
+		var thisId = termCount;
+		termCount++;
+
 		if ((!self.term) || (self.term.closed)) {
 			self.term = new Terminal({
 				cols: 100,
 				rows: 35,
 				x: 100,
 				y: 100,
-				termDiv: 'termTarget',
+				termDiv: 'termTarget' + thisId,
 				bgColor: '#181818',
 				frameColor: '#555555',
 				frameWidth: 1,
@@ -72,7 +65,7 @@ function SystemBase() {
 				catchCtrlH: true,
 				closeOnESC: true,
 				historyUnique: false,
-				id: 0,
+				id: termCount,
 				ps: self.ps,
 				ctrlHandler: null,
 				initHandler: null,
@@ -164,6 +157,7 @@ function SystemBase() {
 
 	this.cmdExit = function() {
 		self.term.close();
+		termCount--;
 	};
 
 	this.cmdWhoAmI = function() {
@@ -183,7 +177,9 @@ function SystemBase() {
 			return false;
 		}
 
-		var newSession = new DNS[ip]();
+		var newSession = new SystemBase(DNS[ip]);
+		self.term.write("SSH: Enter Username for " + ip + ":")
+		self.term.write("SSH: Enter Password for " + ip + ":")
 		newSession.termOpen();
 	};
 

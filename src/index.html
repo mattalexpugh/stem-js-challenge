@@ -2,53 +2,57 @@
 <html>
 	<head>
 		<title>STEM - Hack The Gibson</title>
-			<!-- Shamlessly adapted from cb.vu -->
-	  	<style type="text/css">
+		<!-- Shamlessly adapted from cb.vu -->
+		<style type="text/css">
 			html, body, p, a {
-			    margin: 0;
-			    font-family: "Courier New", fixed, monospace;
-			    background: #080808;
-			    color: #D3D3D3;
+				margin: 0;
+				font-family: "Courier New", fixed, monospace;
+				background: #080808;
+				color: #D3D3D3;
 			}
 			.term {
-			    font-family: "Courier New", fixed, monospace;
-			    font-size: 12px;
-			    color: #5EE06E;
-			    background: none;
-			    letter-spacing: 1px;
+				font-family: "Courier New", fixed, monospace;
+				font-size: 12px;
+				color: #5EE06E;
+				text-shadow: 0 0 7px #1AC621;
+				background: none;
+				letter-spacing: 1px;
 			}
 			.term .termReverse {
-			    color: #232e45;
-			    background: #5EE06E;
+				color: #232e45;
+				background: #5EE06E;
 			}
 			a.tlink, a.tlink:link, a.tlink:visited {
-			    text-decoration: underline;
-			    color: blue;
+				text-decoration: underline;
+				color: blue;
 			}
 			a, a:link, a:visited {
-			    text-decoration: none;
-			    color: #5EE06E;
+				text-decoration: none;
+				color: #5EE06E;
 			}
 			a:hover {
-			    text-decoration: underline;
+				text-decoration: underline;
 			}
 			a:active {
-			    text-decoration: underline;
-			    color: orange;
+				text-decoration: underline;
+				color: orange;
 			}
-			/*#applet { position: absolute; top: 4px; left: 4px; z-index: 2; }*/
 			#link { position: absolute; top: 4px; right: 4px; z-index: 3; }
 		</style>
 		<script language="JavaScript" type="text/javascript" src="lib/underscore.js"></script>
+		<script language="JavaScript" type="text/javascript" src="lib/filesystems.js"></script>
+		<script language="JavaScript" type="text/javascript" src="lib/profiles.js"></script>
 		<script language="JavaScript" type="text/javascript" src="lib/termlib/termlib.js"></script>
 		<script language="JavaScript" type="text/javascript" src="lib/shell-files.js"></script>
 		<script language="JavaScript" type="text/javascript" src="lib/stem-shell.js"></script>
 	</head>
 	<body>
-		<div id="termTarget" class="term"></div>
+		<div id="termTarget0" class="term"></div>
+		<div id="termTarget1" class="term"></div>
+		<div id="termTarget2" class="term"></div>
 	</body>
 	<script type="text/javascript">
-		var termb = new SystemBase();
+		var termb = new SystemBase('base');
 		termb.termOpen();
 	</script>
 </html>
