@@ -2,7 +2,7 @@ function get_base_home_dir() {
     return {
         'documents': {},
         'downloads': {},
-        '.bash_profile': ''
+        '.bash_profile': 'test'
     };
 }
 

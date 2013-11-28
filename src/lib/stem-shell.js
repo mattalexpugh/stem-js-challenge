@@ -108,15 +108,17 @@ function SystemBase(profile, parent) {
 
     this.cmdCat = function () {
         if (self._checkArgs("Error: Usage - cat <filename>")) {
+            console.log(self.currentDir);
 
-            var fileFound = _.has(self.currentDir, self.args[0]);
+            var dot = self.peekPath();
+            var fileFound = _.has(self.currentDir[dot], self.args[0]);
 
             if (!fileFound) {
                 self.term.write("Error: Unknown file: " + self.args[0]);
                 return false;
             }
 
-            self.term.write(self.currentDir[self.args[0]], true);
+            self.term.write(self.currentDir[dot][self.args[0]], true);
         }
     };
 
