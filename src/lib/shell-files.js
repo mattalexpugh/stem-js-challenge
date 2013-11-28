@@ -1,6 +1,3 @@
-//'%+uKant, Immanuel: Critique of Pure Reason. Part I, Chapter I:%-u',
-
-
 var help = [
     '%+r **** termlib.js text wrap sample **** %-r',
     ' ',
