@@ -19,7 +19,7 @@ function get_base_fs() {
 function get_michael_fs() {
     var base_fs = new get_base_fs();
     var michael_home = {
-        '.log': '',
+        'system.log': btoa(log_michael),
         'emails': {
             'int-john-mcgilly.email': email_michael_1,
             'ext-william-monroe.email': email_spam_1

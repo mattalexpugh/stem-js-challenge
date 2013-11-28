@@ -1,7 +1,9 @@
 var DNS = {
     '192.168.1.1': 'base',
     '192.168.2.200': 'michael',
-    '1': 'michael'
+    '192.200.5.50': 'jan',
+    'fdc3:aa7a:d3a2:66cd:0:0:0:1': 'crash_override',
+    '1': 'michael' // This is just for testing
 };
 
 var termCount = 0;
@@ -108,7 +110,6 @@ function SystemBase(profile, parent) {
 
     this.cmdCat = function () {
         if (self._checkArgs("Error: Usage - cat <filename>")) {
-            console.log(self.currentDir);
 
             var dot = self.peekPath();
             var fileFound = _.has(self.currentDir[dot], self.args[0]);
@@ -118,7 +119,7 @@ function SystemBase(profile, parent) {
                 return false;
             }
 
-            self.term.write(self.currentDir[dot][self.args[0]], true);
+            self.term.write(self.currentDir[dot][self.args[0]]);
         }
     };
 
@@ -127,7 +128,19 @@ function SystemBase(profile, parent) {
     };
 
     this.cmdDecrypt = function () {
-        return "decrypt";
+        /* This could do with being merged with cmdCat, atob is the only difference */
+        if (self._checkArgs("Error: Usage - decrypt <filename>")) {
+
+            var dot = self.peekPath();
+            var fileFound = _.has(self.currentDir[dot], self.args[0]);
+
+            if (!fileFound) {
+                self.term.write("Error: Unknown file: " + self.args[0]);
+                return false;
+            }
+
+            self.term.write(atob(self.currentDir[dot][self.args[0]]));
+        }
     };
 
     this.cmdPwd = function () {
