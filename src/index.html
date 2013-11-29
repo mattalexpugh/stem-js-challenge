@@ -2,69 +2,7 @@
 <html>
 	<head>
 		<title>STEM - Hack The Gibson</title>
-		<!-- Shamlessly adapted from cb.vu -->
-		<style type="text/css">
-			html, body, p, a {
-				margin: 0;
-				font-family: "Courier New", fixed, monospace;
-				background: #080808;
-				color: #D3D3D3;
-			}
-			.term {
-				font-family: "Courier New", fixed, monospace;
-				font-size: 12px;
-				color: #5EE06E;
-				text-shadow: 0 0 7px #1AC621;
-				background: none;
-				letter-spacing: 1px;
-				display: inline;
-				float: left;
-				margin-right: 20px;
-			}
-			.term .termReverse {
-				color: #232e45;
-				background: #5EE06E;
-			}
-			.term .michael {
-				color: #94aad6;
-				background-color: rgb(35, 46, 69);
-				text-shadow: 0 0 7px #B4DAD2;
-			}
-			.term .michael .termReverse{
-				background-color: #94aad6;
-				color: rgb(35, 46, 69);
-			}
-			.term .jan {
-				color: #40494C;
-				background-color: white;
-				text-shadow: 0 0 0px black;
-			}
-			.term .jan .termReverse{
-				background-color: #40494C;
-				color: white;
-			}
-			.term .crash {
-				color: #ff0000;
-				background-color: black;
-				text-shadow: 0 0 0px #cc0000;
-			}
-			.term .crash .termReverse{
-				background-color: #ff0000;
-				color: black;
-			}
-			#container {
-				padding: 20px;
-			}
-			.thumbnail {
-				text-align: center;
-			}
-			.icon {
-				margin-bottom: 20px;
-			}
-			.hidden {
-				display: none;
-			}
-		</style>
+		<link rel="stylesheet" type="text/css" href="main.css">
 		<script language="JavaScript" type="text/javascript" src="lib/underscore.js"></script>
 		<script language="JavaScript" type="text/javascript" src="lib/jquery-2.0.3.min.js"></script>
  		<script language="JavaScript" type="text/javascript" src="lib/shell-files.js"></script>
@@ -109,28 +47,55 @@
 					</div>
 				</div>
 			</div>
-			<div id="termTarget" class="term"></div>
+			<div id="right-panel">
+				<div id="termTarget" class="term"></div>
+				<div id="info">
+					<p>
+						<strong>Click on 'Admin Terminal' to begin.</strong>
+					</p>
+					<p>
+						You are a sysadmin at a major IT company, someone
+						has managed to infiltrate your system. Without
+						finding them, they will do a lot of damage to your
+						systems and business.
+					</p>
+					<p>
+						You must stop the intruder as soon as possible. To do
+						this, you must play their game. Follow the clues
+						hidden in each computer (emails, logs) and beat
+						the challenges.
+					</p>
+					<p>
+						Access the hacker's computer and put an end to
+						their hacking attempts! You can always type "help"
+						if you're stuck.
+					</p>
+					<p><strong>Quick Help</strong></p>
+					<p>
+						print current position - <strong>pwd</strong><br />
+						list current directory - <strong>ls</strong><br />
+						change current position - <strong>cd</strong><br />
+						connect to a new computer - <strong>ssh</strong><br />
+					</p>
+				</div>
+			</div>
+			<div style="clear:both;"></div>
+		</div>
+		<div id="footer">
+			footer data here
 		</div>
 	</body>
 	<script type="text/javascript">
-		var currentTerm;
+		var currentTerm = null;
 
 		$('.icon').click(function () {
+			if (currentTerm !== null) {
+				currentTerm.cmdExit();
+			}
+
 			var target = $(this).data('term');
 			currentTerm = new SystemBase(target);
 			currentTerm.termOpen();
-			// var tmpTerm = new SystemBase(target);
-
-			// var password = prompt("Enter password:");
-			// tmpTerm.doLogin(password);
-
-			// if (tmpTerm.isAuthenticated()) {
-			// 	currentTerm = tmpTerm;
-			// 	currentTerm.termOpen();
-			// } else {
-			// 	alert("Incorrect password.");
-			// 	tmpTerm.cmdExit();
-			// }
 		});
 	</script>
 </html>

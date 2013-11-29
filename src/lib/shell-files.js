@@ -1,10 +1,12 @@
 var help = [
-    '%+r **** termlib.js text wrap sample **** %-r',
     ' ',
-    ' * type "tests -w" for wrapping tests.',
-    ' * type "tests" (without option) to see the same texts without wrapping.',
-    ' * type "kant" for some longer text (by Immanuel Kant).',
-    ' * type "help" to see this page.',
+    ' * type "ls" to see this directory\'s contents (where you can go).',
+    ' * type "cd <directory>" to move to that directory (see ls).',
+    ' * type "pwd" to print the wording directory (where you are).',
+    ' * type "cat <file>" to read a file.',
+    ' * type "decrypt <file>" to decrypt an encrypted file.',
+    ' * type "whoami" to see who you\'re logged in as.',
+    ' * type "ssh <computer>" to open a secure shell connection to a PC.',
     ' * type "exit" to quit.',
     ' '
 ];

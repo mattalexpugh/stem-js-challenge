@@ -228,8 +228,8 @@ function SystemBase(profile) {
         newSession.doLogin(self.term.env.password);
 
         if (newSession.isAuthenticated()) {
-            $("#icon-" + profile).show();
             self.cmdExit();
+            $("#icon-" + profile).show();
             newSession.termOpen();
         } else {
             self.term.write("Error: Password incorrect.");
