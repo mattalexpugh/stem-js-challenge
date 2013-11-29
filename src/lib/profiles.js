@@ -6,6 +6,13 @@ var PROFILES = {
         username: "root",
         password: "toor"
     },
+    'admin': {
+        greeting: "%+r MAPLESOFT ADMINISTRATIVE TERMINAL 001  %-r",
+        fs: new get_admin_fs(),
+        ps: "admin $ >",
+        username: "admin",
+        password: "supersecret"
+    },
     'michael': {
         greeting: "%+r MAPLESOFT TERMINAL 211 - ACCESS RESTRICTED %-r",
         fs: new get_michael_fs(),
@@ -15,14 +22,14 @@ var PROFILES = {
     },
     'jan': {
         greeting: "%+r MAPLESOFT MAC TERMINAL 3 - ACCESS RESTRICTED %-r",
-        fs: new get_michael_fs(),
+        fs: new get_jan_fs(),
         ps: "jan@mac3.dyne ~",
         username: "jan",
         password: "fruitbat66"
     },
     'crash_override': {
-        greeting: "%+r MAPLESOFT MAC TERMINAL 3 - ACCESS RESTRICTED %-r",
-        fs: new get_michael_fs(),
+        greeting: "%+r WELCOME TO THE ENDERZONE %-r",
+        fs: new get_crash_fs(),
         ps: "[ crash@hades ] :: >",
         username: "crash_override",
         password: "h4ckth3g1b$0n"

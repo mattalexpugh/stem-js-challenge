@@ -1,5 +1,6 @@
 var DNS = {
-    '192.168.1.1': 'base',
+    '192.168.1.0': 'base', // Not used, base values
+    '192.168.1.1': 'admin',
     '192.168.2.200': 'michael',
     '192.200.5.50': 'jan',
     'fdc3:aa7a:d3a2:66cd:0:0:0:1': 'crash_override',
@@ -163,9 +164,9 @@ function SystemBase(profile, parent) {
                 self.cwd.pop();
                 var dirPtr = self.fs;
 
-                _.each(self.cwd, function (x) {
-                    dirPtr = dirPtr[x];
-                });
+                for (var i = 0; i < self.cwd.length - 1; i++) {
+                    dirPtr = dirPtr[self.cwd[i]];
+                }
 
                 self.currentDir = dirPtr;
             }
@@ -200,6 +201,10 @@ function SystemBase(profile, parent) {
     this.cmdWhoAmI = function () {
         self.term.write(self.username);
     };
+
+    this.cmdHelp = function() {
+        self.term.write(help.join("\n"));
+    }
 
     this.cmdSsh = function () {
         if (!self._checkArgs("Error: Usage - ssh <computer_address>")) {
@@ -249,6 +254,7 @@ function SystemBase(profile, parent) {
         'ls': self.cmdLs,
         'cd': self.cmdCd,
         'cat': self.cmdCat,
+        'help': self.cmdHelp,
         'login': self.cmdLogin,
         'decrypt': self.cmdDecrypt,
         'pwd': self.cmdPwd,

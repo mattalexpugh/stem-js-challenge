@@ -50,6 +50,6 @@ var email_jan_1 = [
 var log_michael = [
     '12:00 - Connection to ',
     '12:00 - Connection to ',
-    '12:00 - Connection to Jan - 192.200.5.5 - using password: fruitbat66 - SUCCESS',
+    '12:00 - Connection to Jan - 192.200.5.50 - using password: fruitbat66 - SUCCESS',
     '12:00 - Connection to '
 ];
