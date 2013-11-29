@@ -10,10 +10,9 @@ var DNS = {
 
 var termCount = 0;
 
-function SystemBase(profile, parent) {
+function SystemBase(profile) {
 
     this.actprofile = profile;
-    this.parent = (parent === undefined) ? null : parent;
     this.args = [];
     this.cwd = ['/'];
     this.fs = PROFILES[profile].fs;
@@ -54,7 +53,6 @@ function SystemBase(profile, parent) {
     }
 
     this.termOpen = function () {
-        var thisId = termCount;
         termCount++;
 
         if ((!self.term) || (self.term.closed)) {
@@ -63,7 +61,7 @@ function SystemBase(profile, parent) {
                     rows: 35,
                     x: 100,
                     y: 100,
-                    termDiv: 'termTarget' + thisId,
+                    termDiv: 'termTarget',
                     bgColor: PROFILES[self.actprofile].color1,
                     frameColor: PROFILES[self.actprofile].color2,
                     frameWidth: 1,
@@ -191,12 +189,7 @@ function SystemBase(profile, parent) {
     };
 
     this.cmdExit = function () {
-        if (self.parent !== null) {
-            self.parent.term.focus();
-        }
-
         self.term.close();
-        termCount--;
     };
 
     this.cmdWhoAmI = function () {
@@ -231,10 +224,12 @@ function SystemBase(profile, parent) {
     this.createSsh = function () {
         var ip = self.term.env.sshIp;
         var profile = DNS[ip];
-        var newSession = new SystemBase(profile, self);
+        var newSession = new SystemBase(profile);
         newSession.doLogin(self.term.env.password);
 
         if (newSession.isAuthenticated()) {
+            $("#icon-" + profile).show();
+            self.cmdExit();
             newSession.termOpen();
         } else {
             self.term.write("Error: Password incorrect.");

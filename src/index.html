@@ -17,7 +17,9 @@
 				text-shadow: 0 0 7px #1AC621;
 				background: none;
 				letter-spacing: 1px;
-                display: inline;
+				display: inline;
+				float: left;
+				margin-right: 20px;
 			}
 			.term .termReverse {
 				color: #232e45;
@@ -50,8 +52,21 @@
 				background-color: #ff0000;
 				color: black;
 			}
+			#container {
+				padding: 20px;
+			}
+			.thumbnail {
+				text-align: center;
+			}
+			.icon {
+				margin-bottom: 20px;
+			}
+			.hidden {
+				display: none;
+			}
 		</style>
 		<script language="JavaScript" type="text/javascript" src="lib/underscore.js"></script>
+		<script language="JavaScript" type="text/javascript" src="lib/jquery-2.0.3.min.js"></script>
  		<script language="JavaScript" type="text/javascript" src="lib/shell-files.js"></script>
 		<script language="JavaScript" type="text/javascript" src="lib/filesystems.js"></script>
 		<script language="JavaScript" type="text/javascript" src="lib/profiles.js"></script>
@@ -59,13 +74,63 @@
 		<script language="JavaScript" type="text/javascript" src="lib/stem-shell.js"></script>
 	</head>
 	<body>
-		<div id="termTarget0" class="term"></div>
-		<div id="termTarget1" class="term"></div>
-		<div id="termTarget2" class="term"></div>
-		<div id="termTarget3" class="term"></div>
+		<div id="container">
+			<div id="desktop-icons" class="term">
+				<div class="icon" id="icon-admin" data-term="admin">
+					<div class="thumbnail">
+						<img src="img/icn_computer.png" />
+					</div>
+					<div class="desc">
+						Admin Terminal
+					</div>
+				</div>
+				<div class="icon hidden" id="icon-michael" data-term="michael">
+					<div class="thumbnail">
+						<img src="img/icn_computer.png" />
+					</div>
+					<div class="desc">
+						Michael Terminal
+					</div>
+				</div>
+				<div class="icon hidden" id="icon-jan" data-term="jan">
+					<div class="thumbnail">
+						<img src="img/icn_computer.png" />
+					</div>
+					<div class="desc">
+						Jan Terminal
+					</div>
+				</div>
+				<div class="icon hidden" id="icon-crash" data-term="crash">
+					<div class="thumbnail">
+						<img src="img/icn_computer.png" />
+					</div>
+					<div class="desc">
+						crash Terminal
+					</div>
+				</div>
+			</div>
+			<div id="termTarget" class="term"></div>
+		</div>
 	</body>
 	<script type="text/javascript">
-		var termb = new SystemBase('admin');
-		termb.termOpen();
+		var currentTerm;
+
+		$('.icon').click(function () {
+			var target = $(this).data('term');
+			currentTerm = new SystemBase(target);
+			currentTerm.termOpen();
+			// var tmpTerm = new SystemBase(target);
+
+			// var password = prompt("Enter password:");
+			// tmpTerm.doLogin(password);
+
+			// if (tmpTerm.isAuthenticated()) {
+			// 	currentTerm = tmpTerm;
+			// 	currentTerm.termOpen();
+			// } else {
+			// 	alert("Incorrect password.");
+			// 	tmpTerm.cmdExit();
+			// }
+		});
 	</script>
 </html>
