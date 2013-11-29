@@ -3,20 +3,21 @@ var DNS = {
     '192.168.1.1': 'admin',
     '192.168.2.200': 'michael',
     '192.200.5.50': 'jan',
-    'fdc3:aa7a:d3a2:66cd:0:0:0:1': 'crash_override',
-    '1': 'michael' // This is just for testing
+    'fdc3:aa7a:d3a2:66cd:0:0:0:1': 'crash',
+    '1': 'michael', // This is just for testing
+    '2': 'crash'
 };
 
 var termCount = 0;
 
 function SystemBase(profile, parent) {
 
-    this.activeprofile = profile;
+    this.actprofile = profile;
     this.parent = (parent === undefined) ? null : parent;
     this.args = [];
     this.cwd = ['/'];
     this.fs = PROFILES[profile].fs;
-    this.currentDir = PROFILES[profile].fs; // Init to the same thing as this.fs
+    this.currentDir = PROFILES[profile].fs;
     this.term = null;
     this.greeting = PROFILES[profile].greeting;
     this.ps = PROFILES[profile].ps;
@@ -63,12 +64,12 @@ function SystemBase(profile, parent) {
                     x: 100,
                     y: 100,
                     termDiv: 'termTarget' + thisId,
-                    bgColor: '#181818',
-                    frameColor: '#555555',
+                    bgColor: PROFILES[self.actprofile].color1,
+                    frameColor: PROFILES[self.actprofile].color2,
                     frameWidth: 1,
                     rowHeight: 15,
                     blinkDelay: 500,
-                    fontClass: 'term',
+                    fontClass: 'term ' + self.actprofile,
                     crsrBlinkMode: false,
                     crsrBlockMode: true,
                     DELisBS: false,
@@ -224,6 +225,7 @@ function SystemBase(profile, parent) {
         self.term.env.getPassword = true;
         self.term.env.next = self.createSsh;
         self.term.env.sshIp = ip;
+        self.blankPs();
     };
 
     this.createSsh = function () {
@@ -240,6 +242,12 @@ function SystemBase(profile, parent) {
 
         self.term.env.sshIp = null;
         self.term.env.password = '';
+    }
+
+    this.blankPs = function () {
+        self.term.env.resetPs = true;
+        self.term.env.ps = self.term.ps;
+        self.term.ps = '';
     }
 
     this.doLogin = function (password) {
@@ -271,6 +279,10 @@ function SystemBase(profile, parent) {
                 self.term.env.password = self.term.lineBuffer;
                 self.term.env.getPassword = false;
                 self.term.env.next();
+            }
+
+            if (self.term.env.resetPs) {
+                self.term.ps = self.term.env.ps;
             }
 
             self.term.rawMode = false;
