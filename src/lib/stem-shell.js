@@ -8,6 +8,7 @@ var DNS = {
 
 var termCount = 0;
 var numBooted = 0;
+var decryptDifficulty = 1; // Sliding scale, ±1 depending on last attempt.
 
 function addNuke(sys) {
     sys.cmdNuke = function() {
@@ -207,6 +208,40 @@ function SystemBase(profile) {
         self.currentDir = dirPtr;
     };
 
+    this.challengeDecrypt = function() {
+        var pool = DECRYPT_CHALLENGES[decryptDifficulty];
+        var puzzle = _.clone(pool[Math.floor(Math.random() * pool.length)]);
+        var targetIdx = Math.floor(Math.random() * puzzle.length);
+        self.term.env.decryptTarget = puzzle[targetIdx];
+        puzzle[targetIdx] = '???';
+
+        self.term.write("Fill in the missing value: " + puzzle.join(' '));
+        self.term.rawMode = true;
+        self.term.env.getDecryptResponse = true;
+        self.term.env.next = self.doDecrypt;
+        self.blankPs();
+    };
+
+    this.doDecrypt = function() {
+//        var response = prompt("Fill in the missing value:\n" + puzzle.join(' '));
+        var response = self.term.env.decryptResponse;
+        self.term.env.decryptSuccess = response == self.term.env.decryptTarget;
+        self.term.env.decryptTarget = null;
+
+        if (self.term.env.decryptSuccess) {
+            decryptDifficulty++;
+            var dot = self.peekPath();
+            self.term.write(atob(self.currentDir[dot][self.args[0]]));
+        } else {
+            decryptDifficulty--;
+            self.term.write("Error: Decryption unsuccessful. Please try again.");
+        }
+
+        // Sanity checking
+        decryptDifficulty = (decryptDifficulty < 1) ? 1 : decryptDifficulty;
+        decryptDifficulty = (decryptDifficulty > 10) ? 10 : decryptDifficulty;
+    };
+
     this.cmdLs = function () {
         var dot = self.peekPath();
         var dir = self.currentDir[dot];
@@ -230,7 +265,6 @@ function SystemBase(profile) {
     };
 
     this.cmdDecrypt = function () {
-        /* This could do with being merged with cmdCat, atob is the only difference */
         if (self._checkArgs("Error: Usage - decrypt <filename>")) {
 
             var dot = self.peekPath();
@@ -241,7 +275,7 @@ function SystemBase(profile) {
                 return false;
             }
 
-            self.term.write(atob(self.currentDir[dot][self.args[0]]));
+            self.challengeDecrypt();
         }
     };
 
@@ -368,6 +402,12 @@ function SystemBase(profile) {
             if (self.term.env.getPassword) {
                 self.term.env.password = self.term.lineBuffer;
                 self.term.env.getPassword = false;
+                self.term.env.next();
+            }
+
+            if (self.term.env.getDecryptResponse) {
+                self.term.env.decryptResponse = self.term.lineBuffer;
+                self.term.env.getDecryptResponse = false;
                 self.term.env.next();
             }
 

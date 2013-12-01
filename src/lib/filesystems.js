@@ -84,7 +84,7 @@ function get_jan_fs() {
         'ext-connection-2': btoa('BACKDOOR, PARTIAL IP: ????:aa7a:????:???? user: `crash`'),
         'ext-connection-3': btoa('BACKDOOR, PARTIAL IP: ????:????:????:66cd user: `crash`'),
         'ext-connection-4': btoa('BACKDOOR, PARTIAL IP: fdc3:????:????:???? user: `crash`'),
-        'int-connection-1': ''
+        'int-connection-1': 'INTERNAL CONNECTION FROM `admin` ACCEPTED'
     };
 
     base_fs['/']['home']['jan'] = base_home;
