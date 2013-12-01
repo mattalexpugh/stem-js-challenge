@@ -8,7 +8,7 @@ var DNS = {
 
 var termCount = 0;
 var numBooted = 0;
-var decryptDifficulty = 1; // Sliding scale, ±1 depending on last attempt.
+var decryptDifficulty = 5; // Sliding scale, ±1 depending on last attempt.
 
 function addNuke(sys) {
     sys.cmdNuke = function() {

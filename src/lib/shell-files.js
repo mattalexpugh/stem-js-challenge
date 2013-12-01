@@ -2,7 +2,7 @@ var help = [
     ' ',
     ' * type "ls" to see this directory\'s contents (where you can go).',
     ' * type "cd <directory>" to move to that directory (see ls).',
-    ' * type "pwd" to print the wording directory (where you are).',
+    ' * type "pwd" to print the working directory (where you are).',
     ' * type "cat <file>" to read a file.',
     ' * type "decrypt <file>" to decrypt an encrypted file.',
     ' * type "clear" to clear the screen.',
@@ -56,7 +56,7 @@ var email_admin_1 = [
         'problems we\'re seeing.',
     ' ',
     'You should have a copy of all the IT staff computer addresses (IPs) in ' +
-        '`officecomputers.txt` (along with their passwords) in your documents folder. ' +
+        '`officecomputers.txt` (along with their passwords) in your `/home/admin/documents` directory. ' +
         'Michael\'s has been left online for ' +
         'you to work, so you shouldn\'t have any problems connecting.',
     ' ',
@@ -78,7 +78,7 @@ var email_michael_1 = [
         'some hacker has taken control of parts. I know you looked at this in August, but ' +
         'this seems different. Could you ssh into it again and take a look? ',
     ' ',
-    'The IP address is 192.200.5.50, I won\'t be emailing you the password, you probably have it in your logs somewhere from last time. ',
+    'The IP address is 192.200.5.50, I won\'t be emailing you the password, you probably have it in your system.log somewhere from last time. ',
     ' ',
     'John',
     ' '
@@ -117,7 +117,8 @@ var email_jan_1 = [
         'access his computer for the details, I don\'t really care how you do it - just do it. ',
     'I\'ve been getting popups on my desktop threatening the secure data on this system by ' +
         'a hacker calling themselves `crash`, I\'ve noticed some encrypted messages in my private ' +
-        'folder, and a bunch of encrypted communication logs in /log that don\'t seem internal.',
+        'folder, and a bunch of encrypted communication logs in `/log` that don\'t seem internal. ' +
+        'You\'ll have to check there, as my `system.log` in `/home/jan` seems to have been hacked.',
     ' ',
     'I\'d recommend your admin look there first, try and make sense of it. It doesn\'t look like ' +
         'the attacker is on our network, so the IP address of their computer will look different.',
@@ -134,11 +135,12 @@ var email_jan_2 = [
     'Jan,',
     ' ',
     'I\'ve asked the admin to have a look into this. From what I can see, it seems this hacker ' +
-        'is showing off. I think that the logs in /log can be reconstructed to find their IP ' +
+        'is showing off. I think that the logs in `/log` can be reconstructed to find their IP ' +
         'address but I can\'t decrypt them. That\'s only half the problem, we need their password ' +
         'too. It\'s probably a phrase they use a lot, but in their so-called `h4cksp34k` - I\'ve ' +
         'put a translation table in your documents folder. Just in case you have a moment of genius!',
     ' ',
+    'You\'re right too, your `system.log` in `/home/jan` is useless here!',
     'John',
     ' '
 ];
