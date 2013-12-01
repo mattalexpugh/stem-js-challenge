@@ -5,8 +5,9 @@ var help = [
     ' * type "pwd" to print the wording directory (where you are).',
     ' * type "cat <file>" to read a file.',
     ' * type "decrypt <file>" to decrypt an encrypted file.',
+    ' * type "clear" to clear the screen.',
     ' * type "whoami" to see who you\'re logged in as.',
-    ' * type "ssh <computer>" to open a secure shell connection to a PC.',
+    ' * type "ssh <computer_address>" to open a secure connection to different PC.',
     ' * type "exit" to quit.',
     ' '
 ];

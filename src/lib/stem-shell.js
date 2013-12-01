@@ -215,7 +215,7 @@ function SystemBase(profile) {
         self.term.env.decryptTarget = puzzle[targetIdx];
         puzzle[targetIdx] = '???';
 
-        self.term.write("Fill in the missing value: " + puzzle.join(' '));
+        self.term.write("[SECRET] Fill in the missing value: " + puzzle.join(' '));
         self.term.rawMode = true;
         self.term.env.getDecryptResponse = true;
         self.term.env.next = self.doDecrypt;
@@ -223,7 +223,6 @@ function SystemBase(profile) {
     };
 
     this.doDecrypt = function() {
-//        var response = prompt("Fill in the missing value:\n" + puzzle.join(' '));
         var response = self.term.env.decryptResponse;
         self.term.env.decryptSuccess = response == self.term.env.decryptTarget;
         self.term.env.decryptTarget = null;
@@ -231,10 +230,13 @@ function SystemBase(profile) {
         if (self.term.env.decryptSuccess) {
             decryptDifficulty++;
             var dot = self.peekPath();
+
+            self.term.write("[DECRYPTION SUCCESSFUL]", true);
             self.term.write(atob(self.currentDir[dot][self.args[0]]));
         } else {
             decryptDifficulty--;
-            self.term.write("Error: Decryption unsuccessful. Please try again.");
+            self.term.write("[DECRYPTION UNSUCCESSFUL]", true);
+            self.term.write("Incorrect response: " + response + " - Please try again.");
         }
 
         // Sanity checking
@@ -351,6 +353,10 @@ function SystemBase(profile) {
         self.blankPs();
     };
 
+    this.cmdClear = function() {
+        self.term.clear();
+    }
+
     this.createSsh = function () {
         var ip = self.term.env.sshIp;
         var profile = DNS[ip];
@@ -392,7 +398,8 @@ function SystemBase(profile) {
         'pwd': self.cmdPwd,
         'exit': self.cmdExit,
         'whoami': self.cmdWhoAmI,
-        'ssh': self.cmdSsh
+        'ssh': self.cmdSsh,
+        'clear': self.cmdClear,
     };
 
     this.termHandler = function () {
