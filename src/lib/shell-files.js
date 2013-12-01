@@ -11,11 +11,61 @@ var help = [
     ' '
 ];
 
+var file_office_computers = [
+    '%+r **** HIGHLY CONFIDENTIAL !! ADMIN ONLY **** %-r',
+    'USER          IP               PASSWORD',
+    '================================================',
+    'Sam           192.168.1.100    g3rmz',
+    'Zeke          192.168.1.128    simonsays1',
+    'George        192.168.1.255    iloveyou',
+    'Michael       192.168.2.200    qwerty123',
+    'Sara          192.168.2.210    sunsh1n3',
+    'Abigail       192.168.2.240    ferrari123',
+    ' '
+];
+
+var file_rosetta_stone = [
+    ' ',
+    'TRANSLATIONS',
+    '========================================================',
+    'a -> 4   b -> b    c -> c    d -> d    e -> 3',
+    'f -> f   g -> g    h -> h    i -> 1    j -> j',
+    'k -> k   l -> l    m -> m    n -> n    o -> 0 (zero, number)',
+    'p -> p   q -> q    r -> r    s -> $    t -> t',
+    'u -> u   v -> v    w -> w    x -> x    y -> y',
+    'z -> z',
+    ' ',
+    'NOTES',
+    '========================================================',
+    'Substitute letters from words phrases with the above.',
+    'Passwords tend to have spaces removed. For example:',
+    ' ',
+    '`break the system` -> br34k th3 $y$t3m -> br34kth3$y$t3m',
+    '`hello bob` -> h3ll0 b0b -> h3ll0b0b',
+    ' '
+];
+
 var email_admin_1 = [
     '%+r **** URGENT EMAIL - PLEASE DELETE **** %-r',
     ' ',
-    'Michael,',
+    'Admin,',
     ' ',
+    'We need your help, ASAP. There\'s a hacker on the network causing issue. Normally, Michael ' +
+        '(our IT guy) would deal with this, but he can\'t work out the encryption on some of the ' +
+        'problems we\'re seeing.',
+    ' ',
+    'You should have a copy of all the IT staff computer addresses (IPs) in ' +
+        '`officecomputers.txt` (along with their passwords) in your documents folder. ' +
+        'Michael\'s has been left online for ' +
+        'you to work, so you shouldn\'t have any problems connecting.',
+    ' ',
+    'This hacker seems smart, a lot of what they\'re doing is encrypted. Remember, you can read a ' +
+        'file with `cat`, but if it looks like gibberish - it\'s encrypted, in which case you must ' +
+        'use `decrypt` on it.',
+    ' ',
+    'Good luck.',
+    'Jogn McGilly [Head of Security]',
+    ' '
 ];
 
 var email_michael_1 = [
@@ -29,10 +79,12 @@ var email_michael_1 = [
     ' ',
     'The IP address is 192.200.5.50, I won\'t be emailing you the password, you probably have it in your logs somewhere from last time. ',
     ' ',
-    'John'
+    'John',
+    ' '
 ];
 
 var email_spam_1 = [
+    ' ',
     'Good Day,',
     ' ',
     'My name is Dr William Monroe, a staff in the Private Clients Section of a well-known bank, here in London, England. ' +
@@ -52,10 +104,12 @@ var email_spam_1 = [
         'money laundry, terrorism or any other illegal act.',
     ' ',
     'Best Regards,',
-    'Dr William Monroe Financial Analysis and Remittance Manager'
+    'Dr William Monroe Financial Analysis and Remittance Manager',
+    ' '
 ];
 
 var email_jan_1 = [
+    ' ',
     'John',
     ' ',
     'I need someone to look at this right away, if Michael\'s away then have the lead admin ' +
@@ -70,7 +124,22 @@ var email_jan_1 = [
     'Thanks for this, I\'ve managed to limit `crash` to this computer only right now, ' +
         'but for how long? Who knows.',
     ' ',
-    'Jan.'
+    'Jan.',
+    ' '
+];
+
+var email_jan_2 = [
+    ' ',
+    'Jan,',
+    ' ',
+    'I\'ve asked the admin to have a look into this. From what I can see, it seems this hacker ' +
+        'is showing off. I think that the logs in /log can be reconstructed to find their IP ' +
+        'address but I can\'t decrypt them. That\'s only half the problem, we need their password ' +
+        'too. It\'s probably a phrase they use a lot, but in their so-called `h4cksp34k` - I\'ve ' +
+        'put a translation table in your documents folder. Just in case you have a moment of genius!',
+    ' ',
+    'John',
+    ' '
 ];
 
 var log_michael = [
@@ -81,5 +150,9 @@ var log_michael = [
 ];
 
 var log_jan = [
-    'foo'
-]
+    ' ',
+    '-=([$y$t3m l0g$ 3r4$3d by cr4$h])=-',
+    ' ',
+    'I win! :D',
+    ' '
+];

@@ -25,7 +25,7 @@ function get_admin_fs() {
     var admin_home = {
         'system.log': btoa('System log empty.'),
         'documents': {
-            'officecomputers.txt': ''
+            'officecomputers.txt': file_office_computers.join('\n')
         },
         'emails': {
             'int-john-mcgilly.email': email_admin_1.join('\n')
@@ -64,9 +64,16 @@ function get_jan_fs() {
 
     var jan_home = {
         'system.log': btoa(log_jan.join('\n')),
+        'documents': {
+            'hackspeak.txt': file_rosetta_stone.join('\n')
+        },
         'emails': {
             'sent-john-mcgilly.email': email_jan_1.join('\n'),
-            'ext-william-monroe.email': email_spam_1.join('\n')
+            'ext-william-monroe.email': email_spam_1.join('\n'),
+            'int-john-mcgilly.email': email_jan_2.join('\n')
+        },
+        'private': {
+            'cr4$hm4nif3$t0.txt': 'hack the gibson'
         }
     };
 
