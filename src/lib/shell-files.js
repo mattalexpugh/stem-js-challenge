@@ -156,3 +156,10 @@ var log_jan = [
     'I win! :D',
     ' '
 ];
+
+var CRASH_TAUNTS = [
+    'cr4$h sees someone in their system!',
+    'what do I have to do to make you go away...? I\'ll find something...',
+    'ok, look around my system if you really want, whilst we\'re connected I\'m doing ' +
+        'the same to you.'
+]

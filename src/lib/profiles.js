@@ -1,6 +1,6 @@
 var PROFILES = {
     'base': {
-        greeting: "%+r Base System Greeting %-r",
+        greeting: "%+r Base System %-r",
         fs: new get_base_fs(),
         ps: "$ >",
         username: "root",

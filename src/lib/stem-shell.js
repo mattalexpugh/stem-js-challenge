@@ -3,12 +3,96 @@ var DNS = {
     '192.168.1.1': 'admin',
     '192.168.2.200': 'michael',
     '192.200.5.50': 'jan',
-    'fdc3:aa7a:d3a2:66cd': 'crash',
-    '1': 'michael', // This is just for testing
-    '2': 'crash'
+    'fdc3:aa7a:d3a2:66cd': 'crash'
 };
 
 var termCount = 0;
+var numBooted = 0;
+
+function addNuke(sys) {
+    sys.cmdNuke = function() {
+        sys.blankPs();
+        sys.term.write('$ UPLOADING NUKE VIRUS NOW', true);
+
+        setTimeout(function() {
+            sys.term.write('what are you uploading...', true);
+        }, 1000);
+
+        setTimeout(function() {
+            sys.term.write('$ UPLOAD COMPLETE. COMMENCING NUKE.', true);
+        }, 2000);
+
+        setTimeout(function() {
+            sys.term.write('STOP!!!! WHAT ARE YOU DOING TO MY COMPUTER?!?', true);
+        }, 4000);
+
+        setTimeout(function() {
+            sys.term.write('$ NUKE COMPLETE. COMPUTER OFFLINE. SHUTTING DOWN.', true);
+        }, 6000);
+
+        setTimeout(function() {
+            sys.cmdExit();
+            alert("MESSAGE: Excellent! The computer is offline, looks like they won't be " +
+                "a problem for a while! I'll email Jan now, nice work! John.");
+
+            DNS['fdc3:aa7a:d3a2:66cd'] = 'admin';
+            $('#icon-crash').data('term', 'admin');
+            $('#icon-crash').hide();
+        }, 10000);
+    }
+
+    sys.CMD_PTRS['upload-nuke'] = sys.cmdNuke;
+}
+
+function Crash(term) {
+
+    this.parent = term;
+
+    var self = this;
+
+    this.interrupt = function(text) {
+        self.parent.term.newLine();
+        self.parent.blankPs();
+        self.parent.term.rawMode = true;
+        self.parent.term.write(text);
+        self.parent.term.newLine();
+        self.parent.term.prompt();
+    };
+
+    this.doKick = function() {
+        setTimeout(self.parent.cmdExit, 5000);
+        self.interrupt('SYSTEM: YOU ARE BEING LOGGED OFF IN 5 SECONDS.');
+        numBooted++;
+    }
+
+    this.doChallenge1 = function() {
+        switch(numBooted) {
+            case 0:
+                self.interrupt('seriously, you\'re in over your head, time to leave!');
+                self.doKick();
+                break;
+            case 1:
+                self.interrupt('ahh you\'re that sysadmin! haha! trying to remove me? :)');
+                setTimeout(function() {
+                    self.interrupt('OK, I\'ve put a worm on your computer too. You\'re ' +
+                        'going away now. DON\'T COME BACK.');
+                    self.doKick();
+                }, 10000);
+                break;
+            case 2:
+                addNuke(self.parent);
+                setTimeout(function() {
+                    alert("MESSAGE: It's John, I see you're in! Quick, upload the nuke virus " +
+                        "with `upload-nuke` command now to break the hacker connection!");
+                }, 10000);
+        }
+    };
+
+    this.run = function() {
+        self.interrupt(CRASH_TAUNTS[numBooted]);
+        setTimeout(self.doChallenge1, 1000);
+    };
+}
 
 function SystemBase(profile) {
 
@@ -24,6 +108,7 @@ function SystemBase(profile) {
     this.password = PROFILES[profile].password;
     this.authenticated = false;
     this.env = Object();
+    this.ai;
 
     var self = this;
 
@@ -98,6 +183,11 @@ function SystemBase(profile) {
             var mainPane = (document.getElementById) ?
                 document.getElementById('mainPane') : document.all.mainPane;
             if (mainPane) mainPane.className = 'lh15 dimmed';
+
+            if (self.actprofile == 'crash') {
+                self.ai = new Crash(self);
+                setTimeout(self.ai.run, 5000);
+            }
         }
     };
 
