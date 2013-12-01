@@ -11,13 +11,23 @@ var help = [
     ' '
 ];
 
+var email_admin_1 = [
+    '%+r **** URGENT EMAIL - PLEASE DELETE **** %-r',
+    ' ',
+    'Michael,',
+    ' ',
+];
+
 var email_michael_1 = [
     '%+r **** URGENT EMAIL - PLEASE DELETE **** %-r',
     ' ',
     'Michael,',
     ' ',
-    'It seems we\'ve been having a problem with the computer in Jan\'s office, could you ssh into it and take a look? ',
-    'The IP address is 192.200.5.50, I won\'t be emailing you the password, you probably have it in your logs somewhere. ',
+    'It seems we\'ve been having a problem with the computer in Jan\'s office, apparently ' +
+        'some hacker has taken control of parts. I know you looked at this in August, but ' +
+        'this seems different. Could you ssh into it again and take a look? ',
+    ' ',
+    'The IP address is 192.200.5.50, I won\'t be emailing you the password, you probably have it in your logs somewhere from last time. ',
     ' ',
     'John'
 ];
@@ -46,12 +56,30 @@ var email_spam_1 = [
 ];
 
 var email_jan_1 = [
-    ''
+    'John',
+    ' ',
+    'I need someone to look at this right away, if Michael\'s away then have the lead admin ' +
+        'access his computer for the details, I don\'t really care how you do it - just do it. ',
+    'I\'ve been getting popups on my desktop threatening the secure data on this system by ' +
+        'a hacker calling themselves `crash`, I\'ve noticed some encrypted messages in my private ' +
+        'folder, and a bunch of encrypted communication logs in /log that don\'t seem internal.',
+    ' ',
+    'I\'d recommend your admin look there first, try and make sense of it. It doesn\'t look like ' +
+        'the attacker is on our network, so the IP address of their computer will look different.',
+    ' ',
+    'Thanks for this, I\'ve managed to limit `crash` to this computer only right now, ' +
+        'but for how long? Who knows.',
+    ' ',
+    'Jan.'
 ];
 
 var log_michael = [
-    '12:00 - Connection to ',
-    '12:00 - Connection to ',
-    '12:00 - Connection to Jan - 192.200.5.50 - using password: fruitbat66 - SUCCESS',
-    '12:00 - Connection to '
+    '01/02/2013 - Connection to Donna\'s PC using password alb3rqu3rqi3 - SUCCESS',
+    '13/05/2013 - Connection to Rodriguez\'s PC using password w4nn4f1t3 - SUCCESS',
+    '15/08/2013 - Connection to Jan\'s PC using password: fruitbat66 - SUCCESS',
+    '02/10/2013 - Connection to John\'s PC using password: god - FAILURE'
 ];
+
+var log_jan = [
+    'foo'
+]

@@ -93,3 +93,7 @@ html, body, p, a {
     padding: 40px;
     height: auto;
 }
+
+#hints-content {
+    display: none;
+}

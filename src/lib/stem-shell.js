@@ -3,7 +3,7 @@ var DNS = {
     '192.168.1.1': 'admin',
     '192.168.2.200': 'michael',
     '192.200.5.50': 'jan',
-    'fdc3:aa7a:d3a2:66cd:0:0:0:1': 'crash',
+    'fdc3:aa7a:d3a2:66cd': 'crash',
     '1': 'michael', // This is just for testing
     '2': 'crash'
 };
@@ -14,9 +14,9 @@ function SystemBase(profile) {
 
     this.actprofile = profile;
     this.args = [];
-    this.cwd = ['/'];
+    this.cwd;
     this.fs = PROFILES[profile].fs;
-    this.currentDir = PROFILES[profile].fs;
+    this.currentDir;
     this.term = null;
     this.greeting = PROFILES[profile].greeting;
     this.ps = PROFILES[profile].ps;
@@ -61,7 +61,7 @@ function SystemBase(profile) {
                     rows: 35,
                     x: 100,
                     y: 100,
-                    termDiv: 'termTarget',
+                    termDiv: 'term-target',
                     bgColor: PROFILES[self.actprofile].color1,
                     frameColor: PROFILES[self.actprofile].color2,
                     frameWidth: 1,
@@ -87,7 +87,13 @@ function SystemBase(profile) {
                 }
             );
 
+            self.cwd = ['/', 'home', self.actprofile];
+            self.resetCwd();
             self.term.open();
+
+            if (self.actprofile == 'admin') {
+                self.term.write('You have new mail.', true);
+            }
 
             var mainPane = (document.getElementById) ?
                 document.getElementById('mainPane') : document.all.mainPane;
@@ -99,6 +105,16 @@ function SystemBase(profile) {
         var mainPane = (document.getElementById) ?
             document.getElementById('mainPane') : document.all.mainPane;
         if (mainPane) mainPane.className = 'lh15';
+    };
+
+    this.resetCwd = function () {
+        var dirPtr = self.fs;
+
+        for (var i = 0; i < self.cwd.length - 1; i++) {
+            dirPtr = dirPtr[self.cwd[i]];
+        }
+
+        self.currentDir = dirPtr;
     };
 
     this.cmdLs = function () {
@@ -121,10 +137,6 @@ function SystemBase(profile) {
 
             self.term.write(self.currentDir[dot][self.args[0]]);
         }
-    };
-
-    this.cmdLogin = function () {
-        return false;
     };
 
     this.cmdDecrypt = function () {
@@ -161,13 +173,7 @@ function SystemBase(profile) {
                 self.term.write("Error: At root already.");
             } else {
                 self.cwd.pop();
-                var dirPtr = self.fs;
-
-                for (var i = 0; i < self.cwd.length - 1; i++) {
-                    dirPtr = dirPtr[self.cwd[i]];
-                }
-
-                self.currentDir = dirPtr;
+                self.resetCwd();
             }
 
             return;
@@ -258,7 +264,6 @@ function SystemBase(profile) {
         'cd': self.cmdCd,
         'cat': self.cmdCat,
         'help': self.cmdHelp,
-        'login': self.cmdLogin,
         'decrypt': self.cmdDecrypt,
         'pwd': self.cmdPwd,
         'exit': self.cmdExit,

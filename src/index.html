@@ -48,7 +48,7 @@
 				</div>
 			</div>
 			<div id="right-panel">
-				<div id="termTarget" class="term"></div>
+				<div id="term-target" class="term"></div>
 				<div id="info">
 					<p>
 						<strong>Click on 'Admin Terminal' to begin.</strong>
@@ -77,6 +77,30 @@
 						change current position - <strong>cd</strong><br />
 						connect to a new computer - <strong>ssh</strong><br />
 					</p>
+					<p id="hints"><strong>[ Toggle Hints ]</strong></p>
+					<div id="hints-content">
+						<p><strong>Directories &amp; Paths</strong></p>
+						<p>
+							The 'path' given by <strong>pwd</strong> tells
+							you <em>where you are</em> inside the computer.
+							This is roughly the same as 'folders' in
+							Windows PCs. Instead of double-clicking on a folder,
+							we <strong>cd</strong> (change directory) into
+							it instead.
+						</p>
+                        <p>
+                            To go <em>up</em> from the current folder, i.e. back
+                            to where you were, use the command <strong>cd ..</strong>
+                        </p>
+						<p><strong>Reading Files</strong></p>
+						<p>
+							files
+						</p>
+						<p><strong>Decrypting Files</strong></p>
+						<p>
+							decrypt
+						</p>
+					</div>
 				</div>
 			</div>
 			<div style="clear:both;"></div>
@@ -96,6 +120,10 @@
 			var target = $(this).data('term');
 			currentTerm = new SystemBase(target);
 			currentTerm.termOpen();
+		});
+
+		$('#hints').click(function() {
+			$('#hints-content').slideToggle();
 		});
 	</script>
 </html>
