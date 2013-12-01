@@ -4,6 +4,10 @@ html, body, p, a {
     color: #979797;
 }
 
+strong {
+    color: #5EE06E;
+}
+
 .term {
     font-family: "Courier New", fixed, monospace;
     font-size: 12px;
