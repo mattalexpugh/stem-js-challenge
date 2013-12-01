@@ -3,7 +3,7 @@ function get_base_home_dir() {
         'documents': {},
         'downloads': {},
         'emails': {},
-        '.bash_profile': 'test'
+        '.bash_profile': '[empty]'
     };
 }
 
