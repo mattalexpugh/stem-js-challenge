@@ -2,8 +2,7 @@ function get_base_home_dir() {
     return {
         'documents': {},
         'downloads': {},
-        'emails': {},
-        '.bash_profile': '[empty]'
+        'emails': {}
     };
 }
 

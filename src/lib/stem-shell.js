@@ -292,7 +292,7 @@ function SystemBase(profile) {
         }
 
         var dirname = self.args[0];
-        var dot = self.peekPath()
+        var dot = self.peekPath();
 
         if (dirname == '..') {
             if (dot == '/') {
@@ -302,6 +302,16 @@ function SystemBase(profile) {
                 self.resetCwd();
             }
 
+            return;
+        }
+
+        if(dirname.charAt(0) == '/') {
+            self.cwd.splice(1, self.cwd.length - 1);
+            self.resetCwd();
+            if(dirname != '/') {
+                self.args[0] = dirname.substring(1);
+                self.cmdCd();
+            }
             return;
         }
 
