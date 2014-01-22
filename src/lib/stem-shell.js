@@ -233,6 +233,7 @@ function SystemBase(profile) {
 
             self.term.write("[DECRYPTION SUCCESSFUL]", true);
             self.term.write(atob(self.currentDir[dot][self.args[0]]));
+	    self.args = [];
         } else {
             decryptDifficulty--;
             self.term.write("[DECRYPTION UNSUCCESSFUL]", true);
@@ -448,6 +449,9 @@ function SystemBase(profile) {
             } else {
                 self.term.write("Command not recognised. Try again.");
             }
+	    if(command != 'decrypt') {
+	        self.args = [];
+	    }
         }
 
         self.term.prompt();
