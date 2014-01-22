@@ -450,6 +450,7 @@ function SystemBase(profile) {
             }
         }
 
+	self.setArgs([]);
         self.term.prompt();
     };
 }
