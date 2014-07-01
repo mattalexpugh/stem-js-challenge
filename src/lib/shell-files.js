@@ -65,7 +65,7 @@ var email_admin_1 = [
         'use `decrypt` on it.',
     ' ',
     'Good luck.',
-    'Jogn McGilly [Head of Security]',
+    'John McGilly [Head of Security]',
     ' '
 ];
 
