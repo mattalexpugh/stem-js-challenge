@@ -1,138 +1,455 @@
-<!--
+var DNS = {
+    '192.168.1.0': 'base', // Not used, base values
+    '192.168.1.1': 'admin',
+    '192.168.2.200': 'michael',
+    '192.200.5.50': 'jan',
+    'fdc3:aa7a:d3a2:66cd': 'crash'
+};
 
-// *** text wrap sample ***
-// mass:werk, N.Landsteiner 2007
+var termCount = 0;
+var numBooted = 0;
+var decryptDifficulty = 5; // Sliding scale, ±1 depending on last attempt.
 
-var texts = [
-'1)',
-'This is just a sample text to introduce the amazing word wrap facillities new with termlib.js 1.3. You must have seen this!',
-'2)',
-'The quick brown fox jumps over the lazy dog. (Seen this before?) Now for a break just at a word boundary ...',
-'3)',
-'The quick brown fox jumps over the lazy dog. (Seen this before?) Now for a line-break at a dash .... and yet another break occuring in the middle of a dashed-word but not exactly filling the line ...',
-'4)',
-'The quick brown fox jumps over the lazy dog. Now this break should occure just(here) before the parenthesis ...',
-'5)',
-'This is a sentence containing a word stretching over more than 1 line ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ and so on ...',
-'6)',
-'And this is a sentence containing a word stretching over 2 lines ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 and so on ...'
-];
+function addNuke(sys) {
+    sys.cmdNuke = function() {
+        sys.blankPs();
+        sys.term.write('$ UPLOADING NUKE VIRUS NOW', true);
 
-var kant=[
-'%+uKant, Immanuel: Critique of Pure Reason. Part I, Chapter I:%-u',
-'',
-'                         Kritik der reinen Vernunft',
-'                                     I.',
-'                       Transzendentale Elementarlehre',
-'',
-'                     Der transzendentalen Elementarlehre',
-'                                Erster Teil',
-'',
-'                        Die transzendentale Ästhetik',
-'',
-'                                    § 1',
-'Auf welche Art und durch welche Mittel sich auch immer eine Erkenntnis auf Gegenstände beziehen mag, es ist doch diejenige, wodurch sie sich auf dieselbe unmittelbar bezieht, und worauf alles Denken als Mittel abzweckt, die %+iAnschauung%-i. Diese findet aber nur statt, sofern uns der Gegenstand gegeben wird; dieses aber ist wiederum, uns Menschen wenigstens, nur dadurch möglich, daß er das Gemüt auf gewisse Weise affiziere. Die Fähigkeit (Rezeptivität), Vorstellungen durch die Art, wie wir von Gegenständen affiziert werden, zu bekommen, heißt %+iSinnlichkeit%-i. Vermittelst der Sinnlichkeit also werden uns Gegenstände %+igegeben%-i, und sie allein liefert uns %+iAnschauungen%-i; durch den Verstand aber werden sie %+igedacht%-i, und von ihm entspringen %+iBegriffe%-i. Alles Denken aber muß sich, es sei geradezu (direkte) oder im Umschweife (indirekte), vermittelst gewisser Merkmale, zuletzt auf Anschauungen, mithin, bei uns, auf Sinnlichkeit beziehen, weil uns auf andere Weise kein Gegenstand gegeben werden kann.',
-'',
-'Die Wirkung eines Gegenstandes auf die Vorstellungsfähigkeit, sofern wir von demselben affiziert werden, ist %+iEmpfindung%-i. Diejenige Anschauung, welche sich auf den Gegenstand durch Empfindung bezieht, heißt %+iempirisch%-i. Der unbestimmte Gegenstand einer empirischen Anschauung heißt %+iErscheinung%-i.',
-'',
-'In der Erscheinung nenne ich das, was der Empfindung korrespondiert, die %+iMaterie%-i derselben, dasjenige aber, welches macht, daß das Mannigfaltige der Erscheinung in gewissen Verhältnissen geordnet werden kann, nenne ich die %+iForm%-i der Erscheinung. Da das, worinnen sich die Empfindungen allein ordnen, und in gewisse Form gestellt werden können, nicht selbst wiederum Empfindung sein kann, so ist uns zwar die Materie aller Erscheinung nur a posteriori gegeben, die Form derselben aber muß zu ihnen insgesamt im Gemüte a priori bereitliegen und daher abgesondert von aller Empfindung können betrachtet werden.',
-'',
-'Ich nenne alle Vorstellungen rein (im transzendentalen Verstande), in denen nichts, was zur Empfindung gehört, angetroffen wird. Demnach wird die reine Form sinnlicher Anschauungen überhaupt im Gemüte a priori angetroffen werden, worinnen alles Mannigfaltige der Erscheinungen in gewissen Verhältnissen angeschaut wird. Diese reine Form der Sinnlichkeit wird auch selber %+ireine Anschauung%-i heißen. So, wenn ich von der Vorstellung eines Körpers das, was der Verstand davon denkt, als Substanz, Kraft, Teilbarkeit usw., imgleichen, was davon zur Empfindung gehört, als Undurchdringlichkeit, Härte, Farbe usw. absondere, so bleibt mir aus dieser empirischen Anschauung noch etwas übrig, nämlich Ausdehnung und Gestalt. Diese gehören zur reinen Anschauung, die a priori, auch ohne einen wirklichen Gegenstand der Sinne oder Empfindung, als eine bloße Form der Sinnlichkeit im Gemüte stattfindet.',
-'',
-'Eine Wissenschaft von allen Prinzipien der Sinnlichkeit a priori nenne ich die %+itranszendentale Ästhetik%-i. Es muß also eine solche Wissenschaft geben, die den ersten Teil der transzendentalen Elementarlehre ausmacht, im Gegensatz derjenigen, welche die Prinzipien des reinen Denkens enthält, und transzendentale Logik genannt wird.',
-'',
-'In der transzendentalen Ästhetik also werden wir zuerst die Sinnlichkeit %+iisolieren%-i, dadurch, daß wir alles absondern, was der Verstand durch seine Begriffe dabei denkt, damit nichts als empirische Anschauung übrigbleibe. Zweitens werden wir von dieser noch alles, was zur Empfindung gehört, abtrennen, damit nichts als reine Anschauung und die bloße Form der Erscheinungen übrigbleibe, welches das einzige ist, das die Sinnlichkeit a priori liefern kann. Bei dieser Untersuchung wird sich finden, daß es zwei reine Formen sinnlicher Anschauung, als Prinzipien der Erkenntnis a priori gebe, nämlich Raum und Zeit, mit deren Erwägung wir uns jetzt beschäftigen werden.'
-]
+        setTimeout(function() {
+            sys.term.write('what are you uploading...', true);
+        }, 1000);
 
-var help = [
-	'%+r **** termlib.js text wrap sample **** %-r',
-	' ',
-	' * type "tests -w" for wrapping tests.',
-	' * type "tests" (without option) to see the same texts without wrapping.',
-	' * type "kant" for some longer text (by Immanuel Kant).',
-	' * type "help" to see this page.',
-	' * type "exit" to quit.',
-	' '
-]
+        setTimeout(function() {
+            sys.term.write('$ UPLOAD COMPLETE. COMMENCING NUKE.', true);
+        }, 2000);
 
-var term;
+        setTimeout(function() {
+            sys.term.write('STOP!!!! WHAT ARE YOU DOING TO MY COMPUTER?!?', true);
+        }, 4000);
 
-function termOpen() {
-	if ((!term) || (term.closed)) {
-		term = new Terminal(
-			{
-				x: 220,
-				y: 70,
-				termDiv: 'termDiv',
-				bgColor: '#232e45',
-				greeting: help.join('%n'),
-				handler: termHandler,
-				exitHandler: termExitHandler,
-				wrapping: true
-			}
-		);
-		term.open();
-		
-		// dimm UI text
-		var mainPane = (document.getElementById)?
-			document.getElementById('mainPane') : document.all.mainPane;
-		if (mainPane) mainPane.className = 'lh15 dimmed';
-	}
+        setTimeout(function() {
+            sys.term.write('$ NUKE COMPLETE. COMPUTER OFFLINE. SHUTTING DOWN.', true);
+        }, 6000);
+
+        setTimeout(function() {
+            sys.cmdExit();
+            alert("MESSAGE: Excellent! The computer is offline, looks like they won't be " +
+                "a problem for a while! I'll email Jan now, nice work! John.");
+
+            DNS['fdc3:aa7a:d3a2:66cd'] = 'admin';
+            $('#icon-crash').data('term', 'admin');
+            $('#icon-crash').hide();
+        }, 10000);
+    }
+
+    sys.CMD_PTRS['upload-nuke'] = sys.cmdNuke;
 }
 
-function termExitHandler() {
-	// reset the UI
-	var mainPane = (document.getElementById)?
-		document.getElementById('mainPane') : document.all.mainPane;
-	if (mainPane) mainPane.className = 'lh15';
+function Crash(term) {
+
+    this.parent = term;
+
+    var self = this;
+
+    this.interrupt = function(text) {
+        self.parent.term.newLine();
+        self.parent.blankPs();
+        self.parent.term.rawMode = true;
+        self.parent.term.write(text);
+        self.parent.term.newLine();
+        self.parent.term.prompt();
+    };
+
+    this.doKick = function() {
+        setTimeout(self.parent.cmdExit, 5000);
+        self.interrupt('SYSTEM: YOU ARE BEING LOGGED OFF IN 5 SECONDS.');
+        numBooted++;
+    }
+
+    this.doChallenge1 = function() {
+        switch(numBooted) {
+            case 0:
+                self.interrupt('seriously, you\'re in over your head, time to leave!');
+                self.doKick();
+                break;
+            case 1:
+                self.interrupt('ahh you\'re that sysadmin! haha! trying to remove me? :)');
+                setTimeout(function() {
+                    self.interrupt('OK, I\'ve put a worm on your computer too. You\'re ' +
+                        'going away now. DON\'T COME BACK.');
+                    self.doKick();
+                }, 10000);
+                break;
+            case 2:
+                addNuke(self.parent);
+                setTimeout(function() {
+                    alert("MESSAGE: It's John, I see you're in! Quick, upload the nuke virus " +
+                        "with `upload-nuke` command now to break the hacker connection!");
+                }, 10000);
+        }
+    };
+
+    this.run = function() {
+        self.interrupt(CRASH_TAUNTS[numBooted]);
+        setTimeout(self.doChallenge1, 1000);
+    };
 }
 
-function termHandler() {
-	// default handler + exit
-	this.newLine();
-	if (this.lineBuffer.match(/^\s*exit\s*$/i)) {
-		this.close();
-		return;
-	}
-	else if (this.lineBuffer.match(/^\s*tests\s+-w\s*$/i)) {
-		this.write('starting tests with wrap %+ion%-i:');
-		this.newLine();
-		this.newLine();
-		this.write(texts);
-	}
-	else if (this.lineBuffer.match(/^\s*tests\s*$/i)) {
-		this.wrapOff();
-		this.write('starting tests with wrap %+ioff%-i:');
-		this.newLine();
-		this.newLine();
-		this.write(texts);
-		this.wrapOn();
-	}
-	else if (this.lineBuffer.match(/^\s*kant\s*$/i)) {
-		this.write(kant, true);
-		return;
-	}
-	else if (this.lineBuffer.match(/^\s*help\s*$/i)) {
-		this.clear();
-		this.write(help);
-	}
-	else if (this.lineBuffer != '') {
-		// echo with write for wrapping, but escape any mark-up
-		this.write('You wrote: '+this.lineBuffer.replace(/%/g, '%%'));
-		this.newLine();
-	}
-	this.prompt();
+function SystemBase(profile) {
+
+    this.actprofile = profile;
+    this.args = [];
+    this.cwd;
+    this.fs = PROFILES[profile].fs;
+    this.currentDir;
+    this.term = null;
+    this.greeting = PROFILES[profile].greeting;
+    this.ps = PROFILES[profile].ps;
+    this.username = PROFILES[profile].username;
+    this.password = PROFILES[profile].password;
+    this.authenticated = false;
+    this.env = Object();
+    this.ai;
+
+    var self = this;
+
+    this.setArgs = function (argv) {
+        self.args = [];
+
+        for (var i = 1; i < argv.length; i++) {
+            self.args.push(argv[i]);
+        }
+    };
+
+    this._checkArgs = function (error) {
+        var hasArgs = (self.args.length > 0);
+
+        if (!hasArgs) {
+            self.term.write(error);
+        }
+
+        return hasArgs;
+    };
+
+    this.peekPath = function () {
+        var dot = self.cwd.pop();
+        self.cwd.push(dot);
+
+        return dot;
+    }
+
+    this.termOpen = function () {
+        termCount++;
+
+        if ((!self.term) || (self.term.closed)) {
+            self.term = new Terminal({
+                    cols: 100,
+                    rows: 35,
+                    x: 100,
+                    y: 100,
+                    termDiv: 'term-target',
+                    bgColor: PROFILES[self.actprofile].color1,
+                    frameColor: PROFILES[self.actprofile].color2,
+                    frameWidth: 1,
+                    rowHeight: 15,
+                    blinkDelay: 500,
+                    fontClass: 'term ' + self.actprofile,
+                    crsrBlinkMode: false,
+                    crsrBlockMode: true,
+                    DELisBS: false,
+                    printTab: true,
+                    printEuro: true,
+                    catchCtrlH: true,
+                    closeOnESC: true,
+                    historyUnique: false,
+                    id: termCount,
+                    ps: self.ps,
+                    ctrlHandler: null,
+                    initHandler: null,
+                    wrap: false,
+                    greeting: self.greeting,
+                    handler: this.termHandler,
+                    exitHandler: this.termExitHandler,
+                }
+            );
+
+            self.cwd = ['/', 'home', self.actprofile];
+            self.resetCwd();
+            self.term.open();
+
+            if (self.actprofile == 'admin') {
+                self.term.write('You have new mail.', true);
+            }
+
+            var mainPane = (document.getElementById) ?
+                document.getElementById('mainPane') : document.all.mainPane;
+            if (mainPane) mainPane.className = 'lh15 dimmed';
+
+            if (self.actprofile == 'crash') {
+                self.ai = new Crash(self);
+                setTimeout(self.ai.run, 5000);
+            }
+        }
+    };
+
+    this.termExitHandler = function () {
+        var mainPane = (document.getElementById) ?
+            document.getElementById('mainPane') : document.all.mainPane;
+        if (mainPane) mainPane.className = 'lh15';
+    };
+
+    this.resetCwd = function () {
+        var dirPtr = self.fs;
+
+        for (var i = 0; i < self.cwd.length - 1; i++) {
+            dirPtr = dirPtr[self.cwd[i]];
+        }
+
+        self.currentDir = dirPtr;
+    };
+
+    this.challengeDecrypt = function() {
+        var pool = DECRYPT_CHALLENGES[decryptDifficulty];
+        var puzzle = _.clone(pool[Math.floor(Math.random() * pool.length)]);
+        var targetIdx = Math.floor(Math.random() * puzzle.length);
+        self.term.env.decryptTarget = puzzle[targetIdx];
+        puzzle[targetIdx] = '???';
+
+        self.term.write("[SECRET] Fill in the missing value: " + puzzle.join(' '));
+        self.term.rawMode = true;
+        self.term.env.getDecryptResponse = true;
+        self.term.env.next = self.doDecrypt;
+        self.blankPs();
+    };
+
+    this.doDecrypt = function() {
+        var response = self.term.env.decryptResponse;
+        self.term.env.decryptSuccess = response == self.term.env.decryptTarget;
+        self.term.env.decryptTarget = null;
+
+        if (self.term.env.decryptSuccess) {
+            decryptDifficulty++;
+            var dot = self.peekPath();
+
+            self.term.write("[DECRYPTION SUCCESSFUL]", true);
+            self.term.write(atob(self.currentDir[dot][self.args[0]]));
+        } else {
+            decryptDifficulty--;
+            self.term.write("[DECRYPTION UNSUCCESSFUL]", true);
+            self.term.write("Incorrect response: " + response + " - Please try again.");
+        }
+
+        // Sanity checking
+        decryptDifficulty = (decryptDifficulty < 1) ? 1 : decryptDifficulty;
+        decryptDifficulty = (decryptDifficulty > 10) ? 10 : decryptDifficulty;
+    };
+
+    this.cmdLs = function () {
+        var dot = self.peekPath();
+        var dir = self.currentDir[dot];
+        var items = _.keys(dir);
+        self.term.write(items);
+    };
+
+    this.cmdCat = function () {
+        if (self._checkArgs("Error: Usage - cat <filename>")) {
+
+            var dot = self.peekPath();
+            var fileFound = _.has(self.currentDir[dot], self.args[0]);
+
+            if (!fileFound) {
+                self.term.write("Error: Unknown file: " + self.args[0]);
+                return false;
+            }
+
+            self.term.write(self.currentDir[dot][self.args[0]]);
+        }
+    };
+
+    this.cmdDecrypt = function () {
+        if (self._checkArgs("Error: Usage - decrypt <filename>")) {
+
+            var dot = self.peekPath();
+            var fileFound = _.has(self.currentDir[dot], self.args[0]);
+
+            if (!fileFound) {
+                self.term.write("Error: Unknown file: " + self.args[0]);
+                return false;
+            }
+
+            self.challengeDecrypt();
+        }
+    };
+
+    this.cmdPwd = function () {
+        var wd = (self.cwd.length == 1) ? self.cwd : self.cwd.join('/').substring(1);
+        self.term.write(wd);
+    };
+
+    this.cmdCd = function () {
+        if (!self._checkArgs("Error: Usage - cd <dirname>")) {
+            return false;
+        }
+
+        var dirname = self.args[0];
+        var dot = self.peekPath();
+
+        if (dirname == '..') {
+            if (dot == '/') {
+                self.term.write("Error: At root already.");
+            } else {
+                self.cwd.pop();
+                self.resetCwd();
+            }
+
+            return;
+        }
+
+        if(dirname.charAt(0) == '/') {
+            self.cwd.splice(1, self.cwd.length - 1);
+            self.resetCwd();
+            if(dirname != '/') {
+                self.args[0] = dirname.substring(1);
+                self.cmdCd();
+            }
+            return;
+        }
+
+        var items = self.currentDir[dot];
+        var dirs = _.filter(_.keys(items), function (x) {
+            return (typeof items[x] == "object");
+        });
+        var valid = _.contains(_.values(dirs), dirname);
+
+        if (!valid) {
+            self.term.write("Error: Unknown directory '" + dirname + "'");
+            return false;
+        }
+
+        self.currentDir = self.currentDir[dot];
+        self.cwd.push(dirname);
+    };
+
+    this.cmdExit = function () {
+        self.term.close();
+    };
+
+    this.cmdWhoAmI = function () {
+        self.term.write(self.username);
+    };
+
+    this.cmdHelp = function() {
+        self.term.write(help.join("\n"));
+    }
+
+    this.cmdSsh = function () {
+        if (!self._checkArgs("Error: Usage - ssh <computer_address>")) {
+            return false;
+        }
+
+        var ip = self.args[0];
+        var valid = _.has(DNS, ip);
+
+        if (!valid) {
+            self.term.write("Error: Unable to connect to " + ip);
+            return false;
+        }
+
+        self.term.write("SSH: Enter Password for " + ip + ":");
+        self.term.rawMode = true;
+        self.term.env.getPassword = true;
+        self.term.env.next = self.createSsh;
+        self.term.env.sshIp = ip;
+        self.blankPs();
+    };
+
+    this.cmdClear = function() {
+        self.term.clear();
+    }
+
+    this.createSsh = function () {
+        var ip = self.term.env.sshIp;
+        var profile = DNS[ip];
+        var newSession = new SystemBase(profile);
+        newSession.doLogin(self.term.env.password);
+
+        if (newSession.isAuthenticated()) {
+            self.cmdExit();
+            $("#icon-" + profile).show();
+            newSession.termOpen();
+        } else {
+            self.term.write("Error: Password incorrect.");
+        }
+
+        self.term.env.sshIp = null;
+        self.term.env.password = '';
+    }
+
+    this.blankPs = function () {
+        self.term.env.resetPs = true;
+        self.term.env.ps = self.term.ps;
+        self.term.ps = '';
+    }
+
+    this.doLogin = function (password) {
+        self.authenticated = (password == self.password);
+    };
+
+    this.isAuthenticated = function () {
+        return self.authenticated;
+    };
+
+    this.CMD_PTRS = {
+        'ls': self.cmdLs,
+        'cd': self.cmdCd,
+        'cat': self.cmdCat,
+        'help': self.cmdHelp,
+        'decrypt': self.cmdDecrypt,
+        'pwd': self.cmdPwd,
+        'exit': self.cmdExit,
+        'whoami': self.cmdWhoAmI,
+        'ssh': self.cmdSsh,
+        'clear': self.cmdClear,
+    };
+
+    this.termHandler = function () {
+        self.term.newLine();
+
+        if (self.term.rawMode) {
+            if (self.term.env.getPassword) {
+                self.term.env.password = self.term.lineBuffer;
+                self.term.env.getPassword = false;
+                self.term.env.next();
+            }
+
+            if (self.term.env.getDecryptResponse) {
+                self.term.env.decryptResponse = self.term.lineBuffer;
+                self.term.env.getDecryptResponse = false;
+                self.term.env.next();
+            }
+
+            if (self.term.env.resetPs) {
+                self.term.ps = self.term.env.ps;
+            }
+
+            self.term.rawMode = false;
+        } else if (self.term.lineBuffer != '') {
+            var funcLine = self.term.lineBuffer.replace(/%/g, '%%');
+            var argv = funcLine.split(" ")
+            var command = argv[0];
+            var commandFound = _.has(self.CMD_PTRS, command);
+
+            if ((argv.length > 1) && (argv[1].length > 0)) {
+                self.setArgs(argv);
+            }
+
+            if (commandFound) {
+                self.CMD_PTRS[command]();
+            } else {
+                self.term.write("Command not recognised. Try again.");
+            }
+        }
+
+        self.term.prompt();
+    };
 }
-
-
-// demo hooks
-
-function test(command) {
-	if ((!term) || (term.closed)) {
-		alert('Please open the terminal first!');
-		return;
-	}
-	TermGlobals.importEachLine( command );
-}
-
-//-->
