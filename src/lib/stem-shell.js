@@ -449,7 +449,6 @@ function SystemBase(profile) {
 
             if (commandFound) {
                 self.CMD_PTRS[command]();
-                self.resetArgs();
             } else {
                 self.term.write("Command not recognised. Try again.");
             }
